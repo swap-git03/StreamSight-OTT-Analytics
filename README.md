@@ -1,54 +1,38 @@
 # StreamSight – OTT Business Intelligence Platform
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![SQL](https://img.shields.io/badge/SQL-MySQL-00758F.svg)](https://www.mysql.com/)
 [![Pandas](https://img.shields.io/badge/Pandas-2.0%2B-150458.svg)](https://pandas.pydata.org/)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-00758F.svg)](https://www.mysql.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![NumPy](https://img.shields.io/badge/NumPy-1.24%2B-013243.svg)](https://numpy.org/)
+[![Power BI](https://img.shields.io/badge/Power_BI-Dashboard-F2C811.svg)](https://powerbi.microsoft.com/)
 
-An enterprise-grade, portfolio-ready **Over-The-Top (OTT) Business Intelligence Platform** designed to analyze 50,000+ streaming sessions. StreamSight converts raw log data into actionable business intelligence to optimize subscriber retention, content licensing, regional growth, and platform performance.
-
----
-
-## 📌 Table of Contents
-1. [Project Overview](#-project-overview)
-2. [Tech Stack](#-tech-stack)
-3. [Repository Structure](#-repository-structure)
-4. [Database Design & Normalization (3NF)](#-database-design--normalization-3nf)
-5. [Data Cleaning & Feature Engineering](#-data-cleaning--feature-engineering)
-6. [Executive KPIs & Business Insights](#-executive-kpis--business-insights)
-7. [SQL Analytics Showcase](#-sql-analytics-showcase)
-8. [Setup & Execution Guide](#-setup--execution-guide)
-9. [Interview Highlights (8–12 LPA Target)](#-interview-highlights-812-lpa-target)
+An end-to-end OTT analytics platform designed to analyze streaming subscriber behavior, content performance, and business KPIs.
 
 ---
 
-## 🎯 Project Overview
+## 📌 Project Summary (As Per Resume)
 
-StreamSight addresses key executive questions for streaming platforms (e.g., Netflix, Prime Video, Hotstar):
-- **Subscriber Engagement**: What are our total watch hours, completion rates, and average content ratings across subscription tiers?
-- **Content Licensing**: Which genres, directors, and content types (Movies vs. Series) drive the highest viewer engagement?
-- **Payment & Churn Risk**: Does payment gateway failure impact session completion rates?
-- **Platform Optimization**: Which devices (Mobile, Smart TV, Laptop) drive peak streaming hours?
+> **Developed an end-to-end OTT analytics platform to analyze streaming subscriber behavior, content performance, and business KPIs. Designed a normalized 3NF MySQL database, built automated Python ETL pipelines for data cleaning and feature engineering, performed advanced SQL analysis (CTEs, Window Functions, Views, Joins), and created interactive Power BI dashboards for executive decision-making.**
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Data Processing & Scripting**: Python 3.10+, Pandas, NumPy
-- **Relational Database**: MySQL 8.0 (3NF Normalization, Foreign Key Constraints, B-Tree Indexing)
-- **Analytics & Prototyping**: Jupyter Notebooks
-- **Visualization**: Power BI (Dashboard designed separately)
-- **Version Control**: Git & GitHub
+- **Python**: Automated ETL scripting & pipeline execution.
+- **SQL**: Database design, DDL/DML, CTEs, Window Functions, Views, Joins.
+- **Pandas**: Data cleaning, sanitization, 3NF table extraction.
+- **NumPy**: Numerical processing and feature engineering support.
+- **Power BI**: Interactive executive dashboards for business metrics.
 
 ---
 
-## 📁 Repository Structure
+## 📁 Clean Repository Structure
 
 ```text
 StreamSight-OTT-Analytics/
 │
 ├── dataset/
-│   ├── StreamSight_OTT_Analytics_Dataset.csv   # Raw streaming log (50k rows)
+│   ├── StreamSight_OTT_Analytics_Dataset.csv   # Raw streaming log dataset
 │   ├── cleaned_streamsight_data.csv            # Cleaned master dataset
 │   ├── users.csv                               # 3NF Users dimension table
 │   ├── content.csv                             # 3NF Content dimension table
@@ -56,168 +40,69 @@ StreamSight-OTT-Analytics/
 │   └── payments.csv                           # 3NF Payments transaction table
 │
 ├── database/
-│   └── schema.sql                             # MySQL DDL table creation script
-│
-├── notebooks/
-│   ├── 01_Data_Cleaning.ipynb                 # Data cleaning & feature engineering
-│   ├── 02_EDA.ipynb                           # Exploratory data analysis & statistical profiling
-│   ├── 03_KPI_Analysis.ipynb                  # Executive Business KPI calculations
-│   └── 04_Business_Insights.ipynb             # Strategic churn & regional recommendations
+│   └── schema.sql                             # Normalized 3NF MySQL schema DDL & indexes
 │
 ├── python/
-│   ├── clean_data.py                          # Automated ETL & data cleaning pipeline
-│   ├── helper.py                             # Reusable modular utility functions
-│   └── mysql_loader.py                        # Automated MySQL data ingestion script
+│   ├── clean_data.py                          # Automated Python ETL pipeline
+│   ├── helper.py                             # Reusable data cleaning & feature engineering helper
+│   └── mysql_loader.py                        # Automated MySQL data loader script
 │
 ├── sql/
-│   ├── basic.sql                              # Basic queries (SELECT, GROUP BY, HAVING)
+│   ├── basic.sql                              # Basic queries (SELECT, GROUP BY, HAVING, Joins)
 │   ├── intermediate.sql                       # Intermediate queries (CASE, Subqueries, Views)
 │   ├── advanced.sql                           # Advanced queries (CTEs, Window Functions, Running Totals)
-│   └── business_questions.sql                 # Real-world executive decision queries
+│   └── business_questions.sql                 # Executive business decision queries
 │
 ├── powerbi/
-│   └── dashboard.pbix                         # Power BI report template
+│   └── dashboard.pbix                         # Interactive Power BI dashboard report
 │
-├── README.md                                  # Comprehensive documentation
-└── requirements.txt                           # Project dependencies
+├── README.md                                  # Project documentation
+└── requirements.txt                           # Core dependencies (pandas, numpy, mysql-connector-python)
 ```
 
 ---
 
-## 🗄 Database Design & Normalization (3NF)
+## 🗄 1. Database Design (Normalized 3NF MySQL)
 
-The raw dataset was normalized from a flat un-normalized log into a **3rd Normal Form (3NF)** relational database schema to eliminate update anomalies and data redundancy:
-
-```mermaid
-erDiagram
-    USERS ||--o{ WATCH_SESSIONS : "watches"
-    CONTENT ||--o{ WATCH_SESSIONS : "featured in"
-    WATCH_SESSIONS ||--o{ PAYMENTS : "generates"
-    USERS ||--o{ PAYMENTS : "makes"
-
-    USERS {
-        int user_id PK
-        int user_age
-        string gender
-        string country
-        string subscription_plan
-    }
-
-    CONTENT {
-        int content_id PK
-        string content_title
-        string content_type
-        string genre
-        int release_year
-        string director
-    }
-
-    WATCH_SESSIONS {
-        int watch_id PK
-        int user_id FK
-        int content_id FK
-        string device
-        date watch_date
-        int minutes_watched
-        string completed
-        int rating
-    }
-
-    PAYMENTS {
-        int payment_id PK
-        int watch_id FK
-        int user_id FK
-        string payment_method
-        string payment_status
-    }
-```
-
-### Table Specifications & Constraints
-- **`users`**: Primary Key `user_id`, Check constraint on `user_age (0–120)`.
-- **`content`**: Primary Key `content_id`, Check constraint on `release_year (1900–2100)`.
-- **`watch_sessions`**: Primary Key `watch_id`, Foreign Keys (`user_id`, `content_id`), Check constraints on `minutes_watched >= 0`, `completed IN ('Yes', 'No')`, `rating (1–5)`.
-- **`payments`**: Primary Key `payment_id`, Foreign Keys (`watch_id`, `user_id`).
-- **Indexes**: Created B-Tree indexes on `country`, `subscription_plan`, `genre`, `watch_date`, `device`, and `payment_status` for sub-second query performance.
+Defined in [`database/schema.sql`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/database/schema.sql):
+- **`users`**: Dimension table (`user_id` PK, `user_age`, `gender`, `country`, `subscription_plan`).
+- **`content`**: Dimension table (`content_id` PK, `content_title`, `content_type`, `genre`, `release_year`, `director`).
+- **`watch_sessions`**: Fact table (`watch_id` PK, `user_id` FK, `content_id` FK, `device`, `watch_date`, `minutes_watched`, `completed`, `rating`).
+- **`payments`**: Transaction table (`payment_id` PK, `watch_id` FK, `user_id` FK, `payment_method`, `payment_status`).
+- **Indexes**: B-Tree performance indexes created on `country`, `subscription_plan`, `genre`, `watch_date`, `device`, `payment_status`.
 
 ---
 
-## 🧹 Data Cleaning & Feature Engineering
+## 🐍 2. Automated Python ETL Pipelines
 
-Implemented in [`python/clean_data.py`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/python/clean_data.py) and [`python/helper.py`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/python/helper.py):
-1. **Data Quality Audit**: Zero missing values detected; whitespace stripped across categorical text columns.
-2. **Type Casting**: Parsed `watch_date` into proper `datetime64[ns]` and numeric columns to `int64`.
-3. **Engineered Features**:
-   - `watch_hours`: `minutes_watched / 60.0` (rounded to 2 decimal places).
-   - `age_group`: Demographic binning (`Youth (<25)`, `Adult (25-45)`, `Senior (>45)`).
-   - Datetime parts: `watch_month_name`, `watch_day_name`, `is_weekend`.
-   - `content_age_years`: `watch_year - release_year`.
+Executed via [`python/clean_data.py`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/python/clean_data.py) and [`python/helper.py`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/python/helper.py):
+- **Data Cleaning**: Stripped whitespace, handled string formats, validated zero nulls/duplicates, cast dates to `datetime64[ns]`.
+- **Feature Engineering**: Engineered `watch_hours`, `age_group` cohorts, temporal date parts (`watch_month_name`, `is_weekend`), and `content_age_years`.
+- **Relational Extraction**: Programmatically extracted 4 normalized CSV datasets for MySQL ingestion.
+- **MySQL Data Ingestion**: [`python/mysql_loader.py`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/python/mysql_loader.py) automates DDL schema creation and batch table loading into MySQL.
 
 ---
 
-## 📊 Executive KPIs & Key Findings
+## 💻 3. Advanced SQL Analysis
 
-| Metric | Output Value | Business Impact |
-| :--- | :--- | :--- |
-| **Total Streaming Sessions** | 50,000 | Massive analytical volume covering 4,999 unique subscribers. |
-| **Total Watch Hours** | ~82,500+ Hours | High cumulative user engagement platform-wide. |
-| **Overall Completion Rate** | ~50.2% | Indicates solid engagement with room for recommendation tuning. |
-| **Average Content Rating** | 4.01 / 5.0 | Strong viewer satisfaction across titles. |
-| **Payment Failure Rate** | ~5.97% | Requires gateway optimization to minimize user friction. |
-
----
-
-## 💻 SQL Analytics Showcase
-
-The project includes 15+ production SQL scripts in the `sql/` directory:
-
-- **Basic SQL ([`sql/basic.sql`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/sql/basic.sql))**: Demographic breakdowns, top sessions, genre rating aggregates with `HAVING`.
-- **Intermediate SQL ([`sql/intermediate.sql`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/sql/intermediate.sql))**: User engagement categorization via `CASE`, subqueries comparing individual watch time to platform average, and database view creation (`vw_executive_kpi_summary`).
-- **Advanced SQL ([`sql/advanced.sql`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/sql/advanced.sql))**:
-  - `DENSE_RANK()` OVER `(PARTITION BY genre)` to identify top 3 content titles per genre.
-  - Cumulative running total watch hours using `SUM() OVER (ORDER BY watch_month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)`.
-  - Frequency gap analysis using `LAG()` to calculate days elapsed since previous session.
-  - Customer segmentation into quartiles using `NTILE(4)`.
-- **Business Problem SQL ([`sql/business_questions.sql`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/sql/business_questions.sql))**: Directly answers executive questions regarding completion rates by plan, payment failure impact, top directors, and regional movie vs. series preference.
+Structured scripts in `sql/`:
+- **CTEs & Window Functions ([`sql/advanced.sql`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/sql/advanced.sql))**:
+  - `DENSE_RANK() OVER (PARTITION BY genre)` to rank top titles per genre.
+  - Cumulative running totals via `SUM() OVER ()`.
+  - Frequency gap analysis via `LAG()` to calculate days between sessions.
+  - Quartile segmentation using `NTILE(4)`.
+- **Views & Joins ([`sql/intermediate.sql`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/sql/intermediate.sql))**:
+  - Materialized database view `vw_executive_kpi_summary`.
+  - Multi-table JOINs and conditional `CASE` classifications.
+- **Executive Business Queries ([`sql/business_questions.sql`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/sql/business_questions.sql))**:
+  - Completion rate analysis by subscription tier.
+  - Payment failure impact on session retention.
+  - Top director scores and regional Movies vs. Series preferences.
 
 ---
 
-## 🚀 Setup & Execution Guide
+## 📊 4. Interactive Power BI Dashboard
 
-### Prerequisites
-- Python 3.10+ installed
-- MySQL Server 8.0+ running
-
-### 1. Clone Repository & Install Dependencies
-```bash
-git clone https://github.com/swap-git03/StreamSight-OTT-Analytics.git
-cd StreamSight-OTT-Analytics
-pip install -r requirements.txt
-```
-
-### 2. Run Data Cleaning Pipeline
-```bash
-python python/clean_data.py
-```
-
-### 3. Load Data into MySQL Database
-Set your MySQL environment credentials (optional) and run:
-```bash
-python python/mysql_loader.py
-```
-
----
-
-## 🎓 Interview Highlights (8–12 LPA Target)
-
-When presenting StreamSight in Data Analyst interviews:
-1. **Explain the Architecture**: Highlight how you built a 3NF relational database schema from raw log data.
-2. **Demonstrate SQL Depth**: Walk through your use of CTEs, Window functions (`RANK`, `DENSE_RANK`, `LAG`, `NTILE`), and running totals to answer business questions.
-3. **Show Modular Python Skills**: Emphasize how `clean_data.py` and `helper.py` implement enterprise ETL standards.
-4. **Focus on Business Impact**: Frame every analysis around subscriber retention, completion rate optimization, and licensing strategy.
-
----
-
-### Author & Portfolio Details
-- **Project**: StreamSight – OTT Business Intelligence Platform
-- **Target Role**: Data Analyst / Senior Data Analyst (8–12 LPA)
-- **GitHub Repository**: [StreamSight-OTT-Analytics](https://github.com/swap-git03/StreamSight-OTT-Analytics)
+Located in [`powerbi/`](file:///e:/CDAC/Projects/StreamSight-OTT-Analytics/powerbi/):
+- Executive KPI cards: Total Watch Hours, Completion Rate %, Avg Rating, Payment Failure Rate %.
+- Interactive visual slicers for Country, Subscription Plan, Device, Content Type, and Genre.
